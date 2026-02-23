@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>دعوة زفاف هاني وآلاء</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4a574;
+            --gold-light: #e8c9a0;
+            --gold-dark: #a67c52;
+            --cream: #faf6f0;
+            --rose: #c9929d;
+            --rose-dark: #8b5a5f;
+            --burgundy: #6b2d3c;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(180deg, var(--cream) 0%, var(--white) 50%, var(--cream) 100%);
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor - Desktop Only */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s, opacity 0.2s;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .cursor {
+                display: block;
+            }
+        }
+
+        .cursor-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            font-size: 20px;
+            opacity: 0;
+            animation: heartFloat 1s ease-out forwards;
+        }
+
+        @keyframes heartFloat {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
+        }
+
+        /* Music Control */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .music-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--white) 0%, var(--cream) 100%);
+            border: 2px solid var(--gold);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px -10px rgba(107, 45, 60, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .music-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            z-index: 0;
+        }
+
+        .music-btn:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .music-btn:hover svg {
+            fill: var(--white);
+        }
+
+        .music-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--gold-dark);
+            position: relative;
+            z-index: 1;
+            transition: fill 0.3s ease;
+        }
+
+        .music-btn.playing {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 10px 30px -10px rgba(212, 165, 116, 0.5); }
+            50% { box-shadow: 0 10px 40px -5px rgba(212, 165, 116, 0.8); }
+        }
+
+        .music-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 20px;
+        }
+
+        .music-bars span {
+            width: 4px;
+            background: var(--gold);
+            border-radius: 2px;
+            animation: bars 1s ease-in-out infinite;
+        }
+
+        .music-bars span:nth-child(1) { animation-delay: 0s; height: 8px; }
+        .music-bars span:nth-child(2) { animation-delay: 0.1s; height: 15px; }
+        .music-bars span:nth-child(3) { animation-delay: 0.2s; height: 10px; }
+        .music-bars span:nth-child(4) { animation-delay: 0.3s; height: 18px; }
+        .music-bars span:nth-child(5) { animation-delay: 0.4s; height: 6px; }
+
+        @keyframes bars {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.5); }
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--white);
+            padding: 8px 15px;
+            border-radius: 25px;
+            box-shadow: 0 5px 20px -5px rgba(107, 45, 60, 0.2);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .music-control:hover .volume-control,
+        .music-control.active .volume-control {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 5px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--cream);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--gold);
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(212, 165, 116, 0.5);
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--gold);
+            cursor: pointer;
+            border: none;
+        }
+
+        .volume-icon {
+            width: 20px;
+            height: 20px;
+            fill: var(--gold-dark);
+        }
+
+        /* Mobile Music Button */
+        @media (max-width: 768px) {
+            .music-control {
+                bottom: 20px;
+                left: 20px;
+            }
+
+            .music-btn {
+                width: 50px;
+                height: 50px;
+            }
+
+            .music-btn svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .volume-control {
+                position: absolute;
+                bottom: 60px;
+                left: 0;
+                flex-direction: column;
+                padding: 15px;
+                border-radius: 15px;
+            }
+
+            .volume-slider {
+                width: 100px;
+                transform: rotate(-90deg);
+            }
+        }
+
+        /* Floating Hearts Background */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            opacity: 0.6;
+            animation: floatUp linear infinite;
+        }
+
+        .floating-heart svg {
+            fill: var(--rose);
+            filter: drop-shadow(0 0 10px rgba(201, 146, 157, 0.5));
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(212, 165, 116, 0.1) 0%, transparent 70%);
+            padding: 20px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 L35 20 L50 20 L38 30 L43 45 L30 35 L17 45 L22 30 L10 20 L25 20 Z' fill='none' stroke='%23d4a574' stroke-width='0.5' opacity='0.1'/%3E%3C/svg%3E");
+            opacity: 0.3;
+            animation: patternMove 20s linear infinite;
+        }
+
+        @keyframes patternMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .bismillah {
+            font-family: 'Amiri', serif;
+            font-size: clamp(1.3rem, 4vw, 2.5rem);
+            color: var(--gold-dark);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeSlideDown 1s ease-out 0.5s forwards;
+            text-shadow: 0 2px 10px rgba(212, 165, 116, 0.3);
+            text-align: center;
+        }
+
+        @keyframes fadeSlideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .main-title {
+            font-family: 'Amiri', serif;
+            font-size: clamp(1.8rem, 6vw, 4rem);
+            color: var(--burgundy);
+            text-align: center;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease-out 1s forwards;
+            position: relative;
+        }
+
+        .main-title::after {
+            content: '';
+            display: block;
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 1rem auto;
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 3vw, 1.5rem);
+            color: var(--rose-dark);
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease-out 1.5s forwards;
+            text-align: center;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease-out 2s forwards;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.85rem;
+            color: var(--gold-dark);
+            margin-bottom: 10px;
+        }
+
+        .scroll-mouse {
+            width: 26px;
+            height: 42px;
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .scroll-mouse::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 2px;
+            animation: scrollWheel 1.5s ease-in-out infinite;
+        }
+
+        @keyframes scrollWheel {
+            0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+            50% { transform: translateX(-50%) translateY(12px); opacity: 0.3; }
+        }
+
+        /* Families Section */
+        .families-section {
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 80px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .families-container {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .family-card {
+            background: linear-gradient(145deg, var(--white) 0%, var(--cream) 100%);
+            padding: 40px 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 
+                0 25px 50px -12px rgba(107, 45, 60, 0.15),
+                0 0 0 1px rgba(212, 165, 116, 0.2);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-width: 280px;
+            max-width: 400px;
+        }
+
+        .family-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--rose), var(--gold));
+        }
+
+        .family-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .family-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 
+                0 35px 60px -15px rgba(107, 45, 60, 0.2),
+                0 0 0 1px rgba(212, 165, 116, 0.3);
+        }
+
+        .family-card h3 {
+            font-family: 'Amiri', serif;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            color: var(--burgundy);
+            margin-bottom: 0.8rem;
+        }
+
+        .family-card p {
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            color: var(--rose-dark);
+            line-height: 1.8;
+        }
+
+        .family-card .icon {
+            width: 55px;
+            height: 55px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .family-card .icon svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--white);
+        }
+
+        /* Rings Section */
+        .rings-section {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 50px 15px;
+            background: radial-gradient(ellipse at center, rgba(212, 165, 116, 0.08) 0%, transparent 60%);
+        }
+
+        .rings-container {
+            position: relative;
+            width: 320px;
+            height: 250px;
+            margin-bottom: 40px;
+        }
+
+        .ring {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border: 10px solid var(--gold);
+            border-radius: 50%;
+            box-shadow: 
+                inset 0 0 30px rgba(212, 165, 116, 0.5),
+                0 0 30px rgba(212, 165, 116, 0.3),
+                0 10px 30px rgba(107, 45, 60, 0.2);
+        }
+
+        .ring::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 2px solid var(--gold-light);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .ring::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, var(--white) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .ring-left {
+            left: 60px;
+            top: 40px;
+            transform: translateX(0) rotate(-15deg);
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ring-right {
+            right: 60px;
+            top: 40px;
+            transform: translateX(0) rotate(15deg);
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rings-container.interlocked .ring-left {
+            transform: translateX(45px) rotate(0deg);
+        }
+
+        .rings-container.interlocked .ring-right {
+            transform: translateX(-45px) rotate(0deg);
+        }
+
+        .diamond {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--gold-light) 50%, var(--gold) 100%);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            animation: diamondSparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes diamondSparkle {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.5); }
+        }
+
+        .names-container {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out 0.5s;
+        }
+
+        .names-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .groom-name {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: var(--burgundy);
+            display: inline-block;
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        .bride-name {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: var(--rose-dark);
+            display: inline-block;
+            animation: pulseGlow 3s ease-in-out infinite 0.5s;
+        }
+
+        .ampersand {
+            font-family: 'Amiri', serif;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            color: var(--gold);
+            margin: 0 15px;
+            display: inline-block;
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(212, 165, 116, 0.3); }
+            50% { text-shadow: 0 0 40px rgba(212, 165, 116, 0.6); }
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+        }
+
+        /* Invitation Section */
+        .invitation-section {
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 80px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .invitation-card {
+            background: linear-gradient(145deg, var(--white) 0%, var(--cream) 100%);
+            padding: 50px 30px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 
+                0 30px 60px -20px rgba(107, 45, 60, 0.2),
+                0 0 0 1px rgba(212, 165, 116, 0.2);
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .invitation-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .invitation-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.1) 0%, transparent 50%);
+            animation: shimmer 5s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .invitation-card h2 {
+            font-family: 'Amiri', serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: var(--burgundy);
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .invitation-text {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: var(--rose-dark);
+            line-height: 2;
+            position: relative;
+        }
+
+        .invitation-text .highlight {
+            color: var(--burgundy);
+            font-weight: 700;
+            font-size: 1.05em;
+        }
+
+        /* Details Section */
+        .details-section {
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 80px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(180deg, var(--cream) 0%, var(--white) 100%);
+        }
+
+        .details-container {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 900px;
+        }
+
+        .detail-card {
+            background: var(--white);
+            padding: 35px 25px;
+            border-radius: 20px;
+            text-align: center;
+            min-width: 250px;
+            flex: 1;
+            max-width: 280px;
+            box-shadow: 0 20px 40px -15px rgba(107, 45, 60, 0.15);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .detail-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .detail-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .detail-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--rose), var(--gold));
+        }
+
+        .detail-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px -10px rgba(212, 165, 116, 0.5);
+        }
+
+        .detail-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--white);
+        }
+
+        .detail-card h3 {
+            font-family: 'Amiri', serif;
+            font-size: 1.3rem;
+            color: var(--burgundy);
+            margin-bottom: 8px;
+        }
+
+        .detail-card p {
+            font-size: 1.1rem;
+            color: var(--rose-dark);
+            font-weight: 500;
+        }
+
+        /* Countdown */
+        .countdown-section {
+            padding: 60px 15px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--white) 0%, var(--cream) 100%);
+        }
+
+        .countdown-title {
+            font-family: 'Amiri', serif;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            color: var(--burgundy);
+            margin-bottom: 30px;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: linear-gradient(145deg, var(--white) 0%, var(--cream) 100%);
+            padding: 20px 15px;
+            border-radius: 15px;
+            min-width: 80px;
+            box-shadow: 
+                10px 10px 30px rgba(107, 45, 60, 0.1),
+                -10px -10px 30px rgba(255, 255, 255, 0.8);
+        }
+
+        .countdown-item .number {
+            font-family: 'Amiri', serif;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            color: var(--gold-dark);
+            display: block;
+            font-weight: 700;
+        }
+
+        .countdown-item .label {
+            font-size: 0.85rem;
+            color: var(--rose-dark);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 50px 15px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--cream) 0%, var(--burgundy) 100%);
+        }
+
+        .footer-text {
+            font-family: 'Amiri', serif;
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            color: var(--gold-light);
+            margin-bottom: 15px;
+        }
+
+        .footer-names {
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            color: var(--cream);
+            opacity: 0.8;
+        }
+
+        /* Particle Burst on Click */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9997;
+            animation: particleBurst 0.8s ease-out forwards;
+        }
+
+        @keyframes particleBurst {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .rings-container {
+                width: 260px;
+                height: 200px;
+            }
+            
+            .ring {
+                width: 100px;
+                height: 100px;
+                border-width: 8px;
+            }
+            
+            .ring-left {
+                left: 45px;
+                top: 30px;
+            }
+            
+            .ring-right {
+                right: 45px;
+                top: 30px;
+            }
+            
+            .rings-container.interlocked .ring-left {
+                transform: translateX(35px) rotate(0deg);
+            }
+            
+            .rings-container.interlocked .ring-right {
+                transform: translateX(-35px) rotate(0deg);
+            }
+
+            .family-card {
+                min-width: 100%;
+                max-width: 100%;
+            }
+
+            .detail-card {
+                min-width: 100%;
+                max-width: 100%;
+            }
+
+            .ampersand {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop preload="auto">
+        <!-- أضف رابط الأغنية هنا -->
+        <source src="music.mp3" type="audio/mpeg">
+        <source src="music.ogg" type="audio/ogg">
+    </audio>
+
+    <!-- Music Control -->
+    <div class="music-control" id="musicControl">
+        <button class="music-btn" id="musicBtn" aria-label="تشغيل/إيقاف الموسيقى">
+            <svg id="playIcon" viewBox="0 0 24 24">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+            <svg id="pauseIcon" style="display: none;" viewBox="0 0 24 24">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+        </button>
+        <div class="volume-control">
+            <svg class="volume-icon" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- Floating Hearts Container -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <p class="bismillah">بسم الله الرحمن الرحيم</p>
+        <h1 class="main-title">دعوة زفاف</h1>
+        <p class="subtitle">يسعدنا دعوتكم لمشاركتنا فرحتنا</p>
+        <div class="scroll-indicator">
+            <span>اسحب للأسفل</span>
+            <div class="scroll-mouse"></div>
+        </div>
+    </section>
+
+    <!-- Families Section -->
+    <section class="families-section">
+        <div class="families-container">
+            <div class="family-card" data-delay="0">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                </div>
+                <h3>عائلة حماد</h3>
+                <p>يتشرف الأستاذ نصر حماد<br>بدعوتكم لحضور حفل زفاف نجله</p>
+            </div>
+            <div class="family-card" data-delay="200">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                </div>
+                <h3>عائلة القيعي</h3>
+                <p>يتشرف الحاج جمال القيعي<br>بدعوتكم لحضور حفل زفاف كريمته</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rings Section -->
+    <section class="rings-section">
+        <div class="rings-container" id="ringsContainer">
+            <div class="ring ring-left">
+                <div class="diamond"></div>
+            </div>
+            <div class="ring ring-right">
+                <div class="diamond"></div>
+            </div>
+        </div>
+        <div class="names-container" id="namesContainer">
+            <span class="groom-name">هاني</span>
+            <span class="ampersand">&</span>
+            <span class="bride-name">آلاء</span>
+        </div>
+    </section>
+
+    <!-- Invitation Section -->
+    <section class="invitation-section">
+        <div class="invitation-card" id="invitationCard">
+            <h2>الكابتن هاني نصر و الآنسة آلاء جمال</h2>
+            <p class="invitation-text">
+                يتشرف الأستاذ <span class="highlight">نصر حماد</span> بدعوتكم لحضور حفل زفاف نجله<br>
+                <span class="highlight">الكابتن هاني نصر</span><br>
+                على كريمة الحاج <span class="highlight">جمال القيعي</span><br>
+                الآنسة <span class="highlight">آلاء</span><br><br>
+                سائلين المولى عز وجل أن يتمم بالخير والسعادة
+            </p>
+        </div>
+    </section>
+
+    <!-- Details Section -->
+    <section class="details-section">
+        <div class="details-container">
+            <div class="detail-card" data-delay="0">
+                <div class="detail-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19 4H18V2H16V4H8V2H6V4H5C3.89 4 3 4.89 3 6V20C3 21.11 3.89 22 5 22H19C20.11 22 21 21.11 21 20V6C21 4.89 20.11 4 19 4M19 20H5V10H19V20M19 8H5V6H19V8M8 12H16V14H8V12Z"/></svg>
+                </div>
+                <h3>التاريخ</h3>
+                <p>18 - 4 - 2026</p>
+            </div>
+            <div class="detail-card" data-delay="200">
+                <div class="detail-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 11.5A2.5 2.5 0 0 1 9.5 9A2.5 2.5 0 0 1 12 6.5A2.5 2.5 0 0 1 14.5 9A2.5 2.5 0 0 1 12 11.5M12 2A7 7 0 0 0 5 9C5 14.25 12 22 12 22S19 14.25 19 9A7 7 0 0 0 12 2Z"/></svg>
+                </div>
+                <h3>المكان</h3>
+                <p>قاعة فيلا فهيد</p>
+            </div>
+            <div class="detail-card" data-delay="400">
+                <div class="detail-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M12.5 7H11V13L16.2 16.2L17 14.9L12.5 12.2V7Z"/></svg>
+                </div>
+                <h3>الوقت</h3>
+                <p>مساءً</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countdown Section -->
+    <section class="countdown-section">
+        <h2 class="countdown-title">العد التنازلي ليوم الفرح</h2>
+        <div class="countdown" id="countdown">
+            <div class="countdown-item">
+                <span class="number" id="days">0</span>
+                <span class="label">يوم</span>
+            </div>
+            <div class="countdown-item">
+                <span class="number" id="hours">0</span>
+                <span class="label">ساعة</span>
+            </div>
+            <div class="countdown-item">
+                <span class="number" id="minutes">0</span>
+                <span class="label">دقيقة</span>
+            </div>
+            <div class="countdown-item">
+                <span class="number" id="seconds">0</span>
+                <span class="label">ثانية</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">مبارك لكما وعقبال الذرية الصالحة</p>
+        <p class="footer-names">عائلة حماد و عائلة القيعي</p>
+    </footer>
+
+    <script>
+        // Initialize all elements first
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        const musicControl = document.getElementById('musicControl');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+        const cursor = document.getElementById('cursor');
+        const heartsContainer = document.getElementById('heartsContainer');
+        const ringsContainer = document.getElementById('ringsContainer');
+        const namesContainer = document.getElementById('namesContainer');
+        const invitationCard = document.getElementById('invitationCard');
+        const weddingDate = new Date('April 18, 2026 18:00:00').getTime();
+
+        let isPlaying = false;
+
+        // Set initial volume
+        bgMusic.volume = 0.5;
+
+        // Music Control
+        musicBtn.addEventListener('click', function() {
+            if (isPlaying) {
+                bgMusic.pause();
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                musicBtn.classList.remove('playing');
+            } else {
+                bgMusic.play().then(() => {
+                    playIcon.style.display = 'none';
+                    pauseIcon.style.display = 'block';
+                    musicBtn.classList.add('playing');
+                }).catch(e => {
+                    console.log('Audio play failed:', e);
+                });
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // Volume Control
+        volumeSlider.addEventListener('input', function() {
+            bgMusic.volume = this.value / 100;
+        });
+
+        // Show volume control on hover/touch
+        musicControl.addEventListener('mouseenter', () => musicControl.classList.add('active'));
+        musicControl.addEventListener('mouseleave', () => musicControl.classList.remove('active'));
+        musicControl.addEventListener('touchstart', () => musicControl.classList.toggle('active'));
+
+        // Custom Cursor (Desktop only)
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        if (!isTouchDevice) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.music-control')) {
+                    createClickHeart(e.clientX, e.clientY);
+                    createParticleBurst(e.clientX, e.clientY);
+                }
+            });
+        }
+
+        function createClickHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.className = 'cursor-heart';
+            heart.innerHTML = '<svg width="30" height="30" viewBox="0 0 24 24" fill="#c9929d"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+        }
+
+        function createParticleBurst(x, y) {
+            const colors = ['#d4a574', '#c9929d', '#e8c9a0', '#a67c52'];
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const angle = (i / 8) * Math.PI * 2;
+                const distance = 50 + Math.random() * 50;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                particle.style.cssText = `
+                    left: ${x}px;
+                    top: ${y}px;
+                    width: 8px;
+                    height: 8px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    border-radius: 50%;
+                    --tx: ${tx}px;
+                    --ty: ${ty}px;
+                `;
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 800);
+            }
+        }
+
+        // Floating Hearts
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            const size = 12 + Math.random() * 20;
+            const duration = 10 + Math.random() * 8;
+            const startX = Math.random() * window.innerWidth;
+            
+            heart.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+            heart.style.left = startX + 'px';
+            heart.style.animationDuration = duration + 's';
+            heartsContainer.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), duration * 1000);
+        }
+
+        // Create hearts periodically
+        setInterval(createFloatingHeart, 1000);
+        
+        // Initial hearts
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createFloatingHeart, i * 300);
+        }
+
+        // Scroll Observer for animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, parseInt(delay));
+                }
+            });
+        }, observerOptions);
+
+        // Observe family cards
+        document.querySelectorAll('.family-card').forEach(card => observer.observe(card));
+
+        // Observe detail cards
+        document.querySelectorAll('.detail-card').forEach(card => observer.observe(card));
+
+        // Observe invitation card
+        if (invitationCard) {
+            observer.observe(invitationCard);
+        }
+
+        // Rings interlocking on scroll
+        const ringsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    ringsContainer.classList.add('interlocked');
+                    namesContainer.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.4 });
+
+        if (ringsContainer) {
+            ringsObserver.observe(ringsContainer);
+        }
+
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours;
+                document.getElementById('minutes').textContent = minutes;
+                document.getElementById('seconds').textContent = seconds;
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Parallax effect on scroll (desktop only)
+        if (!isTouchDevice) {
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const scrolled = window.pageYOffset;
+                        const hero = document.querySelector('.hero');
+                        if (hero) {
+                            hero.style.transform = `translateY(${scrolled * 0.2}px)`;
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
