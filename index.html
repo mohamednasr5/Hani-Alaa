@@ -53,6 +53,33 @@
             }
         }
 
+        /* Touch Hearts - Mobile */
+        .touch-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            animation: touchHeartFloat 1.8s ease-out forwards;
+        }
+
+        .touch-heart svg {
+            filter: drop-shadow(0 0 8px rgba(201, 146, 157, 0.8));
+        }
+
+        @keyframes touchHeartFloat {
+            0% {
+                transform: translateY(0) scale(0.3) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-80px) scale(0.8) rotate(15deg);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-180px) scale(1.2) rotate(-10deg);
+                opacity: 0;
+            }
+        }
+
         .cursor-heart {
             position: fixed;
             pointer-events: none;
@@ -65,6 +92,35 @@
         @keyframes heartFloat {
             0% { transform: translateY(0) scale(1); opacity: 1; }
             100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
+        }
+
+        /* Animated Icons */
+        .icon {
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        .detail-icon {
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(3deg); }
+            75% { transform: translateY(3px) rotate(-3deg); }
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 30px -10px rgba(212, 165, 116, 0.5); }
+            50% { transform: scale(1.08); box-shadow: 0 15px 40px -10px rgba(212, 165, 116, 0.7); }
+        }
+
+        .icon svg, .detail-icon svg {
+            animation: iconSpin 4s linear infinite;
+        }
+
+        @keyframes iconSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Music Control */
@@ -124,40 +180,25 @@
             position: relative;
             z-index: 1;
             transition: fill 0.3s ease;
+            animation: none;
         }
 
         .music-btn.playing {
             animation: pulse 1.5s ease-in-out infinite;
         }
 
+        .music-btn.playing svg {
+            animation: musicNoteBounce 0.5s ease-in-out infinite;
+        }
+
+        @keyframes musicNoteBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
         @keyframes pulse {
             0%, 100% { box-shadow: 0 10px 30px -10px rgba(212, 165, 116, 0.5); }
             50% { box-shadow: 0 10px 40px -5px rgba(212, 165, 116, 0.8); }
-        }
-
-        .music-bars {
-            display: flex;
-            align-items: flex-end;
-            gap: 3px;
-            height: 20px;
-        }
-
-        .music-bars span {
-            width: 4px;
-            background: var(--gold);
-            border-radius: 2px;
-            animation: bars 1s ease-in-out infinite;
-        }
-
-        .music-bars span:nth-child(1) { animation-delay: 0s; height: 8px; }
-        .music-bars span:nth-child(2) { animation-delay: 0.1s; height: 15px; }
-        .music-bars span:nth-child(3) { animation-delay: 0.2s; height: 10px; }
-        .music-bars span:nth-child(4) { animation-delay: 0.3s; height: 18px; }
-        .music-bars span:nth-child(5) { animation-delay: 0.4s; height: 6px; }
-
-        @keyframes bars {
-            0%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(0.5); }
         }
 
         .volume-control {
@@ -215,6 +256,12 @@
             width: 20px;
             height: 20px;
             fill: var(--gold-dark);
+            animation: volumeWave 1.5s ease-in-out infinite;
+        }
+
+        @keyframes volumeWave {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
         /* Mobile Music Button */
@@ -291,8 +338,8 @@
 
         /* Hero Section */
         .hero {
-            height: 100vh;
-            height: 100dvh;
+            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -325,9 +372,45 @@
             color: var(--gold-dark);
             margin-bottom: 1.5rem;
             opacity: 0;
-            animation: fadeSlideDown 1s ease-out 0.5s forwards;
+            animation: fadeSlideDown 1s ease-out 0.3s forwards;
             text-shadow: 0 2px 10px rgba(212, 165, 116, 0.3);
             text-align: center;
+        }
+
+        .verse {
+            font-family: 'Amiri', serif;
+            font-size: clamp(0.95rem, 2.8vw, 1.4rem);
+            color: var(--burgundy);
+            text-align: center;
+            max-width: 700px;
+            line-height: 2.2;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease-out 0.8s forwards;
+            padding: 0 15px;
+            position: relative;
+        }
+
+        .verse::before,
+        .verse::after {
+            content: '❁';
+            color: var(--gold);
+            font-size: 1.2rem;
+            display: block;
+            animation: flowerSpin 3s linear infinite;
+        }
+
+        .verse::before {
+            margin-bottom: 10px;
+        }
+
+        .verse::after {
+            margin-top: 10px;
+        }
+
+        @keyframes flowerSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @keyframes fadeSlideDown {
@@ -342,7 +425,7 @@
             text-align: center;
             margin-bottom: 1rem;
             opacity: 0;
-            animation: fadeSlideUp 1s ease-out 1s forwards;
+            animation: fadeSlideUp 1s ease-out 1.5s forwards;
             position: relative;
         }
 
@@ -365,7 +448,7 @@
             color: var(--rose-dark);
             font-weight: 300;
             opacity: 0;
-            animation: fadeSlideUp 1s ease-out 1.5s forwards;
+            animation: fadeSlideUp 1s ease-out 2s forwards;
             text-align: center;
         }
 
@@ -376,13 +459,19 @@
             flex-direction: column;
             align-items: center;
             opacity: 0;
-            animation: fadeSlideUp 1s ease-out 2s forwards;
+            animation: fadeSlideUp 1s ease-out 2.5s forwards;
         }
 
         .scroll-indicator span {
             font-size: 0.85rem;
             color: var(--gold-dark);
             margin-bottom: 10px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes textPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
         }
 
         .scroll-mouse {
@@ -391,6 +480,12 @@
             border: 2px solid var(--gold);
             border-radius: 20px;
             position: relative;
+            animation: mouseBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes mouseBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
         }
 
         .scroll-mouse::before {
@@ -501,6 +596,12 @@
             width: 28px;
             height: 28px;
             fill: var(--white);
+            animation: starShine 2s ease-in-out infinite;
+        }
+
+        @keyframes starShine {
+            0%, 100% { transform: rotate(0deg) scale(1); filter: brightness(1); }
+            50% { transform: rotate(180deg) scale(1.1); filter: brightness(1.3); }
         }
 
         /* Rings Section */
@@ -533,6 +634,7 @@
                 inset 0 0 30px rgba(212, 165, 116, 0.5),
                 0 0 30px rgba(212, 165, 116, 0.3),
                 0 10px 30px rgba(107, 45, 60, 0.2);
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .ring::before {
@@ -563,14 +665,12 @@
             left: 60px;
             top: 40px;
             transform: translateX(0) rotate(-15deg);
-            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .ring-right {
             right: 60px;
             top: 40px;
             transform: translateX(0) rotate(15deg);
-            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .rings-container.interlocked .ring-left {
@@ -595,8 +695,8 @@
         }
 
         @keyframes diamondSparkle {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.5); }
+            0%, 100% { filter: brightness(1); transform: translateX(-50%) scale(1); }
+            50% { filter: brightness(1.5); transform: translateX(-50%) scale(1.1); }
         }
 
         .names-container {
@@ -783,13 +883,28 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 30px -10px rgba(212, 165, 116, 0.5);
         }
 
         .detail-icon svg {
             width: 30px;
             height: 30px;
             fill: var(--white);
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .detail-card:nth-child(1) .detail-icon svg {
+            animation-delay: 0s;
+        }
+        .detail-card:nth-child(2) .detail-icon svg {
+            animation-delay: 0.3s;
+        }
+        .detail-card:nth-child(3) .detail-icon svg {
+            animation-delay: 0.6s;
         }
 
         .detail-card h3 {
@@ -834,6 +949,11 @@
             box-shadow: 
                 10px 10px 30px rgba(107, 45, 60, 0.1),
                 -10px -10px 30px rgba(255, 255, 255, 0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .countdown-item:hover {
+            transform: scale(1.05);
         }
 
         .countdown-item .number {
@@ -842,6 +962,12 @@
             color: var(--gold-dark);
             display: block;
             font-weight: 700;
+            animation: numberPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes numberPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
 
         .countdown-item .label {
@@ -933,6 +1059,11 @@
                 display: block;
                 margin: 10px 0;
             }
+
+            .verse {
+                font-size: 0.9rem;
+                line-height: 2;
+            }
         }
 
         /* Reduced Motion */
@@ -948,9 +1079,7 @@
 <body>
     <!-- Audio Element -->
     <audio id="bgMusic" loop preload="auto">
-        <!-- أضف رابط الأغنية هنا -->
         <source src="https://raw.githubusercontent.com/mohamednasr5/Hani-Alaa/main/00.mp3" type="audio/mpeg">
-        <source src="https://raw.githubusercontent.com/mohamednasr5/Hani-Alaa/main/00.mp3" type="audio/ogg">
     </audio>
 
     <!-- Music Control -->
@@ -960,7 +1089,7 @@
                 <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
             </svg>
             <svg id="pauseIcon" style="display: none;" viewBox="0 0 24 24">
-                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
             </svg>
         </button>
         <div class="volume-control">
@@ -980,6 +1109,9 @@
     <!-- Hero Section -->
     <section class="hero">
         <p class="bismillah">بسم الله الرحمن الرحيم</p>
+        <p class="verse">
+            وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ
+        </p>
         <h1 class="main-title">دعوة زفاف</h1>
         <p class="subtitle">يسعدنا دعوتكم لمشاركتنا فرحتنا</p>
         <div class="scroll-indicator">
@@ -1111,11 +1243,67 @@
         const weddingDate = new Date('April 18, 2026 18:00:00').getTime();
 
         let isPlaying = false;
+        let hasAutoPlayed = false;
+        
+        // Detect touch device
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
         // Set initial volume
         bgMusic.volume = 0.5;
 
-        // Music Control
+        // ========== MOBILE: Auto-play on first scroll ==========
+        if (isTouchDevice) {
+            window.addEventListener('scroll', function autoPlayOnScroll() {
+                if (!hasAutoPlayed && !isPlaying) {
+                    bgMusic.play().then(() => {
+                        isPlaying = true;
+                        hasAutoPlayed = true;
+                        playIcon.style.display = 'none';
+                        pauseIcon.style.display = 'block';
+                        musicBtn.classList.add('playing');
+                    }).catch(e => {
+                        console.log('Auto-play prevented:', e);
+                    });
+                }
+            }, { once: false });
+        }
+
+        // ========== MOBILE: Touch hearts effect ==========
+        if (isTouchDevice) {
+            document.addEventListener('touchstart', function(e) {
+                if (e.target.closest('.music-control')) return;
+                const touch = e.touches[0];
+                createTouchHearts(touch.clientX, touch.clientY);
+            }, { passive: true });
+        }
+
+        // Create multiple romantic hearts on touch
+        function createTouchHearts(x, y) {
+            const colors = ['#c9929d', '#d4a574', '#e8c9a0', '#a67c52', '#8b5a5f'];
+            const heartCount = 5 + Math.floor(Math.random() * 4);
+            
+            for (let i = 0; i < heartCount; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'touch-heart';
+                    
+                    const size = 20 + Math.random() * 25;
+                    const offsetX = (Math.random() - 0.5) * 80;
+                    const offsetY = (Math.random() - 0.5) * 40;
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    heart.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+                    
+                    heart.style.left = (x + offsetX) + 'px';
+                    heart.style.top = (y + offsetY) + 'px';
+                    
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 1800);
+                }, i * 50);
+            }
+        }
+
+        // Music Control Button
         musicBtn.addEventListener('click', function() {
             if (isPlaying) {
                 bgMusic.pause();
@@ -1142,11 +1330,12 @@
         // Show volume control on hover/touch
         musicControl.addEventListener('mouseenter', () => musicControl.classList.add('active'));
         musicControl.addEventListener('mouseleave', () => musicControl.classList.remove('active'));
-        musicControl.addEventListener('touchstart', () => musicControl.classList.toggle('active'));
+        musicControl.addEventListener('touchstart', (e) => {
+            e.stopPropagation();
+            musicControl.classList.toggle('active');
+        });
 
-        // Custom Cursor (Desktop only)
-        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        
+        // ========== DESKTOP: Custom Cursor ==========
         if (!isTouchDevice) {
             document.addEventListener('mousemove', (e) => {
                 cursor.style.left = e.clientX + 'px';
@@ -1195,7 +1384,7 @@
             }
         }
 
-        // Floating Hearts
+        // Floating Hearts Background
         function createFloatingHeart() {
             const heart = document.createElement('div');
             heart.className = 'floating-heart';
@@ -1211,10 +1400,8 @@
             setTimeout(() => heart.remove(), duration * 1000);
         }
 
-        // Create hearts periodically
         setInterval(createFloatingHeart, 1000);
         
-        // Initial hearts
         for (let i = 0; i < 5; i++) {
             setTimeout(createFloatingHeart, i * 300);
         }
@@ -1236,30 +1423,54 @@
             });
         }, observerOptions);
 
-        // Observe family cards
         document.querySelectorAll('.family-card').forEach(card => observer.observe(card));
-
-        // Observe detail cards
         document.querySelectorAll('.detail-card').forEach(card => observer.observe(card));
 
-        // Observe invitation card
         if (invitationCard) {
             observer.observe(invitationCard);
         }
 
-        // Rings interlocking on scroll
+        // ========== RINGS: Bidirectional interlocking ==========
+        let lastScrollY = window.scrollY;
+        let ringsSectionVisible = false;
+
         const ringsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
+                ringsSectionVisible = entry.isIntersecting;
                 if (entry.isIntersecting) {
                     ringsContainer.classList.add('interlocked');
                     namesContainer.classList.add('visible');
                 }
             });
-        }, { threshold: 0.4 });
+        }, { threshold: 0.3 });
 
         if (ringsContainer) {
             ringsObserver.observe(ringsContainer);
         }
+
+        // Handle scroll direction for rings
+        window.addEventListener('scroll', () => {
+            if (!ringsSectionVisible) return;
+            
+            const currentScrollY = window.scrollY;
+            const ringsRect = ringsContainer.getBoundingClientRect();
+            const ringsCenter = ringsRect.top + ringsRect.height / 2;
+            const viewportCenter = window.innerHeight / 2;
+            
+            // If rings section is in the middle of viewport, keep interlocked
+            // If scrolling away, unlock
+            const distanceFromCenter = Math.abs(ringsCenter - viewportCenter);
+            
+            if (distanceFromCenter < 150) {
+                ringsContainer.classList.add('interlocked');
+                namesContainer.classList.add('visible');
+            } else {
+                ringsContainer.classList.remove('interlocked');
+                namesContainer.classList.remove('visible');
+            }
+            
+            lastScrollY = currentScrollY;
+        });
 
         // Countdown Timer
         function updateCountdown() {
