@@ -114,13 +114,9 @@
             50% { transform: scale(1.08); box-shadow: 0 15px 40px -10px rgba(212, 165, 116, 0.7); }
         }
 
-        .icon svg, .detail-icon svg {
-            animation: iconSpin 4s linear infinite;
-        }
-
-        @keyframes iconSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes starShine {
+            0%, 100% { transform: rotate(0deg) scale(1); filter: brightness(1); }
+            50% { transform: rotate(180deg) scale(1.1); filter: brightness(1.3); }
         }
 
         /* Music Control */
@@ -599,11 +595,6 @@
             animation: starShine 2s ease-in-out infinite;
         }
 
-        @keyframes starShine {
-            0%, 100% { transform: rotate(0deg) scale(1); filter: brightness(1); }
-            50% { transform: rotate(180deg) scale(1.1); filter: brightness(1.3); }
-        }
-
         /* Rings Section */
         .rings-section {
             min-height: 100vh;
@@ -748,7 +739,7 @@
             75% { transform: scale(1.1); }
         }
 
-        /* Invitation Section */
+        /* Invitation Section with Floral Background */
         .invitation-section {
             min-height: 100vh;
             min-height: 100dvh;
@@ -761,15 +752,15 @@
         }
 
         .invitation-card {
-            background: linear-gradient(145deg, var(--white) 0%, var(--cream) 100%);
-            padding: 50px 30px;
+            background: linear-gradient(145deg, rgba(250, 246, 240, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+            padding: 60px 40px;
             border-radius: 25px;
             text-align: center;
-            max-width: 600px;
+            max-width: 650px;
             width: 100%;
             box-shadow: 
-                0 30px 60px -20px rgba(107, 45, 60, 0.2),
-                0 0 0 1px rgba(212, 165, 116, 0.2);
+                0 30px 60px -20px rgba(107, 45, 60, 0.25),
+                0 0 0 1px rgba(212, 165, 116, 0.3);
             opacity: 0;
             transform: translateY(50px) scale(0.95);
             transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
@@ -782,20 +773,31 @@
             transform: translateY(0) scale(1);
         }
 
+        /* Floral Background Image */
         .invitation-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(212, 165, 116, 0.1) 0%, transparent 50%);
-            animation: shimmer 5s linear infinite;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://z-cdn-media.chatglm.cn/files/563840b0-b1bc-4f3e-8a75-4a45333330b5.jpg?auth_key=1871807195-c2c39a5ffb2e4f53925054a154964576-0-fec24861f5f7b5de3ca328629713eee7');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.25;
+            z-index: 0;
         }
 
-        @keyframes shimmer {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .invitation-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(145deg, rgba(250, 246, 240, 0.7) 0%, rgba(255, 255, 255, 0.8) 100%);
+            z-index: 1;
         }
 
         .invitation-card h2 {
@@ -804,6 +806,7 @@
             color: var(--burgundy);
             margin-bottom: 25px;
             position: relative;
+            z-index: 2;
         }
 
         .invitation-text {
@@ -811,12 +814,38 @@
             color: var(--rose-dark);
             line-height: 2;
             position: relative;
+            z-index: 2;
         }
 
         .invitation-text .highlight {
             color: var(--burgundy);
             font-weight: 700;
             font-size: 1.05em;
+        }
+
+        /* Decorative Elements */
+        .invitation-card .decor-top,
+        .invitation-card .decor-bottom {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            color: var(--gold);
+            font-size: 1.5rem;
+            animation: decorSpin 4s linear infinite;
+        }
+
+        .invitation-card .decor-top {
+            top: 15px;
+        }
+
+        .invitation-card .decor-bottom {
+            bottom: 15px;
+        }
+
+        @keyframes decorSpin {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) rotate(360deg); }
         }
 
         /* Details Section */
@@ -1064,6 +1093,10 @@
                 font-size: 0.9rem;
                 line-height: 2;
             }
+
+            .invitation-card {
+                padding: 50px 25px;
+            }
         }
 
         /* Reduced Motion */
@@ -1160,6 +1193,7 @@
     <!-- Invitation Section -->
     <section class="invitation-section">
         <div class="invitation-card" id="invitationCard">
+            <div class="decor-top">❀</div>
             <h2>الكابتن هاني نصر و الآنسة آلاء جمال</h2>
             <p class="invitation-text">
                 يتشرف الأستاذ <span class="highlight">نصر حماد</span> بدعوتكم لحضور حفل زفاف نجله<br>
@@ -1168,6 +1202,7 @@
                 الآنسة <span class="highlight">آلاء</span><br><br>
                 سائلين المولى عز وجل أن يتمم بالخير والسعادة
             </p>
+            <div class="decor-bottom">❀</div>
         </div>
     </section>
 
@@ -1457,8 +1492,6 @@
             const ringsCenter = ringsRect.top + ringsRect.height / 2;
             const viewportCenter = window.innerHeight / 2;
             
-            // If rings section is in the middle of viewport, keep interlocked
-            // If scrolling away, unlock
             const distanceFromCenter = Math.abs(ringsCenter - viewportCenter);
             
             if (distanceFromCenter < 150) {
